@@ -3,7 +3,7 @@
 Plugin Name: 7uploads
 Plugin URI: http://7-layers.at/
 Description: Publish your Files with easy to use Interface and automatic Linsave.in encrypting. Requires exec-php Plugin.
-Version: 1.5b
+Version: 1.6
 Author: Neschkudla Patrick
 Author URI: http://www.7-layers.at
 
@@ -23,9 +23,9 @@ Author URI: http://www.7-layers.at
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-add_action('init','checkData',$table_prefix);
-add_action('deactivate_7uploads linksave/7uploads.php','cleanInstall');
+register_activation_hook( __FILE__, 'cleanInstall' );
+register_deactivation_hook( __FILE__, 'cleanInstall' );
+add_action('wp_head','checkData',$table_prefix);
 add_filter('the_content','formatPost');
 
 
@@ -59,20 +59,31 @@ function cleanInstall(){
 
 
 function makeUploadEntryPost(){
-	global $wpdb;
-	$sql = 'INSERT INTO `'.$wpdb->prefix.'posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, \'1\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'<?php setUploadEntrieForm(); ?>\', \'Upload Eintragen\', \'0\', \'\', \'publish\', \'closed\', \'open\', \'\', \'7uploads\', \'\', \'\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'\', \'0\', \'\', \'0\', \'page\', \'\', \'0\');';
-	mysql_query($sql) or die(mysql_error());
+	$c= "<?php setUploadEntrieForm() ?>";
+	$post = array(
+	  'post_content' => $c, //The full text of the post.
+	  'post_status' =>'publish', //Set the status of the new post.
+	  'post_title' =>"Upload Eintragen",
+	  'post_type' =>"page"
+	);  
+
+	wp_insert_post($post);
 }
 
 function makePresetPost(){
-	global $wpdb;
-	$cont = '<img src="!!!COVER!!!" alt="!!!TITLE!!!" width="269" height="384" /></p>
-	!!!DESCRIPTION!!!</p>
-<strong>Dauer:</strong> !!!DAUER!!! <br /> <strong>Gr&ouml;&szlig;e:</strong> !!!SIZE!!! <br /> <strong>Sprache:&nbsp;</strong>!!!LANGUAGE!!!</p>
-<strong>Download:</strong> <a href="!!!LINKS!!!" target="_blank">!!!HOSTER!!!</a></p>
-<strong>Passwort:</strong> !!!PASSWORT!!!</p>';
-		$sql = 'INSERT INTO `'.$wpdb->prefix.'posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, \'1\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \''.$cont.'\', \'preset\', \'0\', \'\', \'draft\', \'closed\', \'open\', \'\', \'preset\', \'\', \'\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'\', \'0\', \'\', \'0\', \'post\', \'\', \'0\');';
-		mysql_query($sql) or die(mysql_error());
+	$cont = '<p><img src="!!!COVER!!!" alt="!!!TITLE!!!" width="269" height="384" /></p>
+	<p>!!!DESCRIPTION!!!</p>
+<p><strong>Dauer:</strong> !!!DAUER!!! <br /> <strong>Gr&ouml;&szlig;e:</strong> !!!SIZE!!! <br /> <strong>Sprache:&nbsp;</strong>!!!LANGUAGE!!!</p>
+<!--!!!LINKSINFO!!!-->
+<p><strong>Download:</strong> <a href="!!!LINKS!!!" target="_blank">!!!HOSTER!!!</a></p>
+<p><strong>Passwort:</strong> !!!PASSWORT!!!</p>';
+	$post = array(
+	  'post_content' => $cont, //The full text of the post.
+	  'post_status' => 'draft', //Set the status of the new post.
+	  'post_title' => "preset"
+	);  
+
+	wp_insert_post($post);
 }
 
 function get_rows ($table_and_query) {
@@ -102,44 +113,53 @@ if($_POST['sendet']=="Eintragen"){
 	}
 	
 		$links = $_POST['links'];
-		$links = nl2br($links);
 		$links = str_replace("<br />","\r\n",$links);
-	$wslinks = split("\r\n",$_POST['links']);
-	$post_data = "protect=TRUE&links=".$links."&ordnername=".$_POST['up_title']."&cover=".$_POST['coverurl']."&beschreibung=".$_POST['descr']."&myschutz=container&werbung=banner&container_typen=";
 	
-	
-	if($_POST['dlc']){
-		$post_data.="dlc";
-	}
-	if($_POST['rsdf']){
-		$post_data.="rsdf";
-	}
-	if($_POST['ccf']){
-		$post_data.="ccf";
-	}
-	
-	$useCurl = 1;
-	if($useCurl){
+	if($_POST['crypter']=="ls"){
+		$post_data = "protect=TRUE&links=".$links."&ordnername=".$_POST['up_title']."&cover=".$_POST['coverurl']."&beschreibung=".$_POST['descr']."&myschutz=container&werbung=banner&container_typen=";
+		if($_POST['dlc']){
+			$post_data.="dlc";
+		}
+		if($_POST['rsdf']){
+			$post_data.="rsdf";
+		}
+		if($_POST['ccf']){
+			$post_data.="ccf";
+		}
 		$ch = curl_init();
-		@curl_setopt($ch, CURLOPT_URL, "http://linksave.in/protect?api=FlipAcE:klopfer1");
+		@curl_setopt($ch, CURLOPT_URL, "http://linksave.in/protect?api=7uploads:7uploads");
 		@curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 		@curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$status = curl_exec($ch);
 		$ct = "http://linksave.in/".curl_multi_getcontent($ch);
+		$preset = str_replace("!!!LINKS!!!",$ct, $preset);
+	}else{
+		$url = "http://linkcrypt.ws/api.php?API=TRUE&name=".$_POST['up_title']."&download_password=".$_POST['pw']."&cover=".$_POST['coverurl'];
+		$url.="&download_1=".$links;	
+		$post_data = 'links='.$links.'&API=TRUE&name='.$_POST['up_title'].'&download_password='.$_POST['pw'].'&cover='.$_POST['coverurl'].'&layer_id='.$_POST['excid'];
+		$ch = curl_init();
+		@curl_setopt($ch, CURLOPT_URL, "http://linkcrypt.ws/api.php");
+		@curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+		@curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$status = curl_exec($ch);
+		$ct = curl_multi_getcontent($ch);
+		$preset = str_replace("!!!LINKS!!!",$ct, $preset);
+		$ct = "<img src=\'http://linkcrypt.ws/png/".strrchr($ct,"/")."\'/>";
+		$preset = $ct."<br /><br />".$preset;
 	}
 	
 	if(strpos($ct,"ERROR")){
 		echo "<b>Es ist ein Fehler beim eintragen aufgetreten! Bitte versuche es erneut!</b>";
 	}else{
-	
-	$preset = str_replace("!!!LINKS!!!",$ct, $preset);
-	$ct = $ct." <img src=\'http://linkcrypt.ws/png/".strrchr($ct,"/")."\'/>";
-	$preset = str_replace("!!!LINKSINFO!!!",$ct, $preset);
-	$preset = str_replace("!!!PASSWORT!!!",$_POST['pw'], $preset);
-	$preset = str_replace("!!!LANGUAGE!!!",$_POST['lang'], $preset);
-	
-	$sql = 'INSERT INTO `'.$table_prefix.'posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, \'1\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \''.$preset.'\', \''.$_POST['up_title'].'\', \'0\', \'\', \'pending\', \'closed\', \'open\', \'\', \''.$_POST['up_title'].'\', \'\', \'\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'\', \'0\', \'\', \'0\', \'post\', \'\', \'0\');';
-	mysql_query($sql) or die(mysql_error());}
+		$preset = str_replace("!!!PASSWORT!!!",$_POST['pw'], $preset);
+		$preset = str_replace("!!!LANGUAGE!!!",$_POST['lang'], $preset);
+		
+		$sql = 'INSERT INTO `'.$wpdb->prefix.'posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (NULL, \'1\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \''.$preset.'\', \''.$_POST['up_title'].'\', \'0\', \'\', \'pending\', \'closed\', \'open\', \'\', \''.$_POST['up_title'].'\', \'\', \'\', \'0000-00-00 00:00:00\', \'0000-00-00 00:00:00\', \'\', \'0\', \'\', \'0\', \'post\', \'\', \'0\');';
+		
+		mysql_query($sql) or die(mysql_error());
+		$x = $wpdb->get_var("SELECT `ID` FROM $wpdb->posts WHERE post_content='".$preset."'");
+		wp_set_post_categories($x,array($_POST['cat']));
+	}
 }
 
 function setUploadEntrieForm(){
@@ -190,12 +210,24 @@ function setUploadEntrieForm(){
 									</td>
 				</tr>
 				<tr>
+					<td>W&auml;hle einen Cryptservice</td>
+					<td>
+						<select name="crypter">
+							<option value="ls" checked="checked" onclick="document.getElementsByName('containerwahl')['0'].style.display='table-row';document.getElementsByName('exid')['0'].style.display='none';">linksave.in</option>
+							<option value="lc" checked="checked" onclick="document.getElementsByName('containerwahl')['0'].style.display='none';document.getElementsByName('exid')['0'].style.display='table-row';">linkcrypt.ws</option>
+						</select>
+					</td>
+				</tr>
+				<tr name="containerwahl">
 					<td>Container:</td>
 					<td>
 						<input type="checkbox" name="dlc" checked="checked" /> DLC <br />
 						<input type="checkbox" name="ccf" /> CCF <br />
 						<input type="checkbox" name="rsdf" /> RSDF <br />
 					</td>
+				</tr>
+				<tr name="exid" style="display:none;">
+					<td>Exchange ID:</td><td><input type="text" name="excid" /></td>
 				</tr>
 				<tr>
 					<td>Links: </td><td><textarea class="necron" cols="40" rows="8" name="links" style="border:1px solid #000000;" ></textarea></td>
@@ -209,7 +241,7 @@ function setUploadEntrieForm(){
 				</tr>
 			</table>
 			
-			<span style="font-size:9px;">&#42;Jeder Link in eine eigene Zeile. Die Links werden automatisch mit linkcrypt.ws verschl&uuml;sselt.</span>
+			<span style="font-size:9px;">&#42;Jeder Link in eine eigene Zeile. Die Links werden automatisch mit dem gew&auml;hlten Crypter verschl&uuml;sselt.</span>
 		</form>
 	<?php
 } ?>
