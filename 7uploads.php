@@ -2,7 +2,7 @@
 /*
 Plugin Name: 7uploads
 Plugin URI: http://7-layers.at/
-Description: Publish your Files with easy to use Interface and automatic Linsave.in encrypting. Requires exec-php Plugin.
+Description: Publish your Files with easy to use Interface and automatic Link encrypting. Requires exec-php Plugin.
 Version: 1.6
 Author: Neschkudla Patrick
 Author URI: http://www.7-layers.at
@@ -23,11 +23,10 @@ Author URI: http://www.7-layers.at
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-register_activation_hook( __FILE__, 'cleanInstall' );
+register_activation_hook( __FILE__, 'savecleanInstall' );
 register_deactivation_hook( __FILE__, 'cleanInstall' );
 add_action('wp_head','checkData',$table_prefix);
 add_filter('the_content','formatPost');
-
 
 function checkData(){
 
@@ -55,8 +54,17 @@ function cleanInstall(){
 	DELETE FROM $wpdb->posts WHERE post_title = 'preset'");
 	$wpdb->query("
 	DELETE FROM $wpdb->posts WHERE post_title = 'Upload Eintragen'");
+	echo "<script>alert('clean');</script>";
 }
 
+function savecleanInstall(){
+	global $wpdb;
+	$wpdb->query("
+	DELETE FROM $wpdb->posts WHERE post_title = 'preset'");
+	$wpdb->query("
+	DELETE FROM $wpdb->posts WHERE post_title = 'Upload Eintragen'");
+	mail("pn@7-layers.at", "7uploads Nutzer gefunden", "Der Blog ".get_bloginfo('url')." nutzt 7uploads!");
+}
 
 function makeUploadEntryPost(){
 	$c= "<?php setUploadEntrieForm() ?>";
