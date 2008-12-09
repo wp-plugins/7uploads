@@ -1,23 +1,25 @@
 === 7uploads - Linksave.in ===
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1597957
+Contributors: Neschkudla Patrick
 Tags: uploads, entries, linksave.in, crypt, links, save
 Requires at least: 2.*
-Tested up to: 2.6.5
+Tested up to: 2.7 RC1
 Version: 1.5b
+Stable tag: trunk
 
-An easy to use - Linksave.in Wordpress Plugin - With Entry Possibilities
+An easy to use - Linksave.in Wordpress Upload Entry Plugin
 
 == Description ==
 
-Latest Version available @ www.7-layers.at
+visit www.7-layers.at
 
 The 7uploads Wordpress Plugin adds a Page to your Wordpress Installation where Users can easily enter
 Links to their uploaded Files (images, videos,...) 
 
-It requires the exec-php Plugin!
+**It requires the [exec-php](http://wordpress.org/extend/plugins/exec-php/ "exec-php") Plugin!**
 
 Users are able to enter the following types of data:
-*	"Title" - The Title of the created Post - The Title of the Upload
+*    "Title" - The Title of the created Post - The Title of the Upload
 *   "Cover" - An URL to a Cover, Image or anything else that will be shown in the final post
 *   "Beschreibung" - A description of the Files uploaded
 *   "Links" - The Links -> They have to be seperated by new lines
@@ -30,13 +32,9 @@ The Look&Feel of the News Post can be easily changed by editing the preset artic
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
 1. Upload the folder `7uploads` and `exec-php` to the `/wp-content/plugins/` directory
 2. Activate the plugin `7uploads` and `exec-php` through the 'Plugins' menu in WordPress
-3. Drink a coup of warm tea :P
+3. Drink a cup of warm tea :P
 
 == Frequently Asked Questions ==
 
