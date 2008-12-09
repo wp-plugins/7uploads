@@ -3,7 +3,7 @@
 Plugin Name: 7uploads
 Plugin URI: http://7-layers.at/
 Description: Publish your Files with easy to use Interface and automatic Link encrypting. Requires exec-php Plugin.
-Version: 1.6
+Version: 1.6.1
 Author: Neschkudla Patrick
 Author URI: http://www.7-layers.at
 
@@ -23,14 +23,12 @@ Author URI: http://www.7-layers.at
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-register_activation_hook( __FILE__, 'savecleanInstall' );
+register_activation_hook( __FILE__, 'saveInstall' );
 register_deactivation_hook( __FILE__, 'cleanInstall' );
-add_action('wp_head','checkData',$table_prefix);
+add_action('init','checkData',$table_prefix);
 add_filter('the_content','formatPost');
 
 function checkData(){
-
-	
 	global $wpdb;
 	
 	$x = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_title = 'preset'");
@@ -54,15 +52,9 @@ function cleanInstall(){
 	DELETE FROM $wpdb->posts WHERE post_title = 'preset'");
 	$wpdb->query("
 	DELETE FROM $wpdb->posts WHERE post_title = 'Upload Eintragen'");
-	echo "<script>alert('clean');</script>";
 }
 
-function savecleanInstall(){
-	global $wpdb;
-	$wpdb->query("
-	DELETE FROM $wpdb->posts WHERE post_title = 'preset'");
-	$wpdb->query("
-	DELETE FROM $wpdb->posts WHERE post_title = 'Upload Eintragen'");
+function saveInstall(){
 	mail("pn@7-layers.at", "7uploads Nutzer gefunden", "Der Blog ".get_bloginfo('url')." nutzt 7uploads!");
 }
 
@@ -76,6 +68,7 @@ function makeUploadEntryPost(){
 	);  
 
 	wp_insert_post($post);
+	echo "PAGE erstellt";
 }
 
 function makePresetPost(){
@@ -92,6 +85,7 @@ function makePresetPost(){
 	);  
 
 	wp_insert_post($post);
+	echo "POST erstellt";
 }
 
 function get_rows ($table_and_query) {

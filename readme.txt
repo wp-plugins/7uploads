@@ -1,11 +1,11 @@
 === 7uploads ===
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1597957
-Tags: uploads, entries, linksave.in, linkcrypt.ws, crypt, links, save
+Tags: uploads, entries, linksave.in, crypt, links, save
 Requires at least: 2.*
 Tested up to: 2.7 RC1
-Version: 1.6
+Version: 1.6.1
 
-An easy to use - Linkcrypter Wordpress Plugin - With Entry Possibilities
+An easy to use - Linksave.in Wordpress Plugin - With Entry Possibilities
 
 == Description ==
 
@@ -14,11 +14,6 @@ Latest Version available @ www.7-layers.at
 The 7uploads Wordpress Plugin adds a Page to your Wordpress Installation where Users can easily enter
 Links to their uploaded Files (images, videos,...) 
 
-Their links will automatically be crypted by a linkcrypter they choose.
-There are 2 crypters available:
-	- linkcrypt.ws
-	- linksave.in
-
 It requires the exec-php Plugin!
 
 Users are able to enter the following types of data:
@@ -26,9 +21,7 @@ Users are able to enter the following types of data:
 *   "Cover" - An URL to a Cover, Image or anything else that will be shown in the final post
 *   "Beschreibung" - A description of the Files uploaded
 *   "Hoster" - The host where the files are :D
-*   "Crypter" - Choose the Linkcrypt service to use!
-*   "Exchange ID" - only for linkcrypt.ws
-*   "Container" - (only for linksave.in)
+*   "Container" - DLC, RSDF or CCF -> the user can choose!
 *   "Links" - The Links -> They have to be seperated by new lines
 *   "Passwort" - If the Files are saved by a Password enter it here
 *   "Upped by" - Enter your name =)
@@ -66,4 +59,3 @@ Contact me - flipace@thn.at (MSN) || 412 133 173 (ICQ) || support@7-layers.at (M
 1. The Standard Layout to enter the Data
 2. One of the infinite possibilities to Style the generated posts
 3. The final look @ linksave.in
-4. The final look @Êlinkcrypt.ws
