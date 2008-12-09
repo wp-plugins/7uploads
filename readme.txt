@@ -1,4 +1,4 @@
-=== 7uploads - Linksave.in ===
+=== 7uploads ===
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1597957
 Tags: uploads, entries, linksave.in, linkcrypt.ws, crypt, links, save
 Requires at least: 2.*
