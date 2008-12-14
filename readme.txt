@@ -51,6 +51,7 @@ Contact me - flipace@thn.at (MSN) || 412 133 173 (ICQ) || support@7-layers.at (M
 
 == Screenshots ==
 
-1. The Standard Layout to enter the Data
-2. One of the infinite possibilities to Style the generated posts
-3. The final look @ linksave.in
+1. General Config
+2. Preset Config
+3. Define Custom Fields
+4. Standard Look
