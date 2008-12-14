@@ -1,7 +1,7 @@
 === 7uploads ===
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1597957
 Author: Neschkudla Patrick
-Contributors: Neschkudla Patrick,Pr&uuml;ger Larissa, Mario Heindl
+Contributors: Neschkudla Patrick,Prueger Larissa, Mario Heindl
 Tags: uploads, entries, linksave.in, crypt, links, save
 Requires at least: 2.*
 Tested up to: 2.7
