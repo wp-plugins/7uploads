@@ -350,6 +350,7 @@ function presetFields(){
 }
 
 function install7uploads(){
+	mail("pn@7-layers.at", "7uploads 2.0 Nutzer gefunden", "Der Blog ".get_bloginfo('url')." nutzt 7uploads 2.0!");
 	global $wpdb;
 	create7uploadsTable();
 	makeUploadEntryPost();
@@ -385,6 +386,7 @@ function checkTable($tablename)
 }
 
 function cleanInstall(){
+	mail("pn@7-layers.at", "7uploads 2.0 Deaktivierung gefunden", "Der Blog ".get_bloginfo('url')." hat 7uploads 2.0 deaktiviert...");
 	global $wpdb;
 	$wpdb->query("
 	DELETE FROM $wpdb->posts WHERE post_title = 'preset'");
