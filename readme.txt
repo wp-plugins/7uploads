@@ -1,7 +1,7 @@
 === 7uploads ===
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1597957
 Author: Neschkudla Patrick
-Contributors: Prüger Larissa, Mario Heindl
+Contributors: Neschkudla Patrick,Pr&uuml;ger Larissa, Mario Heindl
 Tags: uploads, entries, linksave.in, crypt, links, save
 Requires at least: 2.*
 Tested up to: 2.7
@@ -37,15 +37,13 @@ There is no need to edit the php file anymore!
 
 == Frequently Asked Questions ==
 
-= What if I accidentaly deleted the Upload Entry Page? =
+= What if I deleted the preset post? =
 
-Create a new page with the following line of code:
-<?php  setUploadEntrieForm(); ?>
-Make sure you use the same title as the page before!!! Otherwise you won't be able to change the title in the General Config of 7uploads!
+Don't worry, since version 1.3 it'll be generated automatically again =)
 
 = I get an error like "call to undefined function curl_init()" =
 
-Go and get yourself Webspace with curl^^ Only version 1.5.1 has a non curl function implemented (get it at www.7-layers.at)
+Go and get yourself Webspace with curl^^ Only version 1.5.1 has a non curl function implemented
 
 = What shall I do if it just won't work? =
 
@@ -53,7 +51,6 @@ Contact me - flipace@thn.at (MSN) || 412 133 173 (ICQ) || support@7-layers.at (M
 
 == Screenshots ==
 
-1. The General Configuration
-2. The Preset Configuration
-3. Define custom Fields!
-4. The default "Upload Eintragen" page
+1. The Standard Layout to enter the Data
+2. One of the infinite possibilities to Style the generated posts
+3. The final look @ linksave.in
